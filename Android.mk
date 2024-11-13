@@ -1,6 +1,10 @@
 LOCAL_PATH := $(call my-dir)
 
+
+
 include $(CLEAR_VARS)
+
+
 LOCAL_MODULE := dump
 LOCAL_SRC_FILES += $(wildcard $(LOCAL_PATH)/src/elffix/*.cpp)
 LOCAL_SRC_FILES += $(wildcard $(LOCAL_PATH)/src/elffix/*.c)
