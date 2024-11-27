@@ -26,11 +26,12 @@ static int __main(int argc, char *argv[])
     if (argc < 5)
     {
         printf("%s <pid> <base_hex> <end_hex> <outPath> "
-               "[is-stop-process-before-dump] [is-fix-so-after-dump]\n",
+               "[is-stop-process-before-dump] [is-fix-so-after-dump] [is-only-fix-mode]\n",
                argv[0]);
         return -1;
     }
 
+    const char *outPath = argv[4];
     long pid = strtol(argv[1], 0, 10);
     uint64_t begin = 0, end = 0;
     char bufBegin[255] = {0};
@@ -43,7 +44,24 @@ static int __main(int argc, char *argv[])
 
     end = strtoull(strEnd, 0, 16);
 
-    const char *outPath = argv[4];
+    if (argc > 5)
+    {
+        if (argv[7][0] != '0')
+        {
+            // only-fix-mode
+            char fixed_path[255] = {0};
+            sprintf(fixed_path, "fix_%s", (char*)outPath);
+            printf("try fix %s\n", outPath);
+            fix_so(outPath, fixed_path, (unsigned)begin);
+            printf("end fix %s output to %s\n", outPath, fixed_path);
+            chmod(fixed_path, 0666);
+            return 0;
+        }
+    }
+
+    
+
+    
     char tmpPath[255] = {0};
     sprintf(tmpPath, "%s.tmp", outPath);
 

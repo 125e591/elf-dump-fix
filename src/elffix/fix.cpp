@@ -254,6 +254,7 @@ static void _regen_section_header(const Elf_Ehdr_Type *pehdr,
     int nDynSyms = 0;
     for (int i = 0; i < n; i++)
     {
+        printf("[INFO] Processing .dynamic entry %d\n", i);
         int tag = dyn[i].d_tag;
         switch (tag)
         {
@@ -447,7 +448,7 @@ static void _regen_section_header(const Elf_Ehdr_Type *pehdr,
                 printf("[INFO] Found DT_FINI_ARRAYSZ, d_ptr=%lx\n", dyn[i].d_un.d_val);
                 g_shdr[FINIARRAY].sh_size = dyn[i].d_un.d_val;
                 break;
-            case DT_INIT_ARRAY:
+            case DT_INIT_ARRAY:// 函数地址也需要减掉base
                 printf("[INFO] Found DT_INIT_ARRAY, d_ptr=%lx\n", dyn[i].d_un.d_ptr);
                 dyn[i].d_un.d_ptr -= bias;
                 g_shdr[INITARRAY].sh_name = _get_off_in_shstrtab(".init_array");
